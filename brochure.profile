@@ -59,6 +59,7 @@ function brochure_profile_modules() {
   'imagecache_customactions',
   'imagecache_effects',
   'imagecache_textactions',
+  'imagecache_ui',
   'imagefield',
   'image_fupload_imagefield',
   'jquery_plugin',
