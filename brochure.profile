@@ -42,14 +42,14 @@ function brochure_profile_modules() {
   'filefield',
   'filefield_paths',
   'fontyourface',
-  'i18n',
-  'i18nblocks',
-  'i18ncck',
-  'i18nmenu',
-  'i18nstrings',
-  'i18nsync',
-  'i18ntaxonomy',
-  'i18nviews',
+/*  'i18n', */
+/*  'i18nblocks', */
+/*  'i18ncck', */
+/*  'i18nmenu', */
+/*  'i18nstrings', */
+/*  'i18nsync', */
+/*  'i18ntaxonomy', */
+/*  'i18nviews', */
   'imageapi',
   'imageapi_gd',
   'imagecache',
@@ -94,15 +94,15 @@ function brochure_profile_modules() {
 /**
  *   Features
 **/
-  'kt_basic',
+/*  'kt_basic', */
   'kt_bookmarks',
   'kt_block_header_image',
   'kt_bueditor_imce',
-  'kt_i18n',
+/*  'kt_i18n', */
   'kt_links',
   'kt_stories',
   'kt_simple_gallery',
-  'ktodo',
+/*  'ktodo', */
   'kt_brochure_layouts_boxes',
   );
 }
