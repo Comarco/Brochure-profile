@@ -17,7 +17,7 @@ function brochure_profile_modules() {
   'locale',
   'menu',
   'path',
-  'php', /* <= should deasapper in the neer future */
+  'php', /* <= should deasapper in the near future */
   'search',
   'taxonomy',
   'translation',
