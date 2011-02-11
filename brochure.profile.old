@@ -1,0 +1,354 @@
+<?php
+
+/**
+* Return an array of the modules to be enabled when this profile is installed.
+*
+* @return
+*  An array of modules to be enabled.
+*/
+function brochure_profile_modules() {
+  return array(
+    // core, required
+    'block', 'filter', 'node', 'system', 'user',
+    // core, optional as per http://drupal.org/node/27367
+    'taxonomy',  // NOTE: taxonomy needs to be first in the list or other modules bomb.
+    'comment', 'contact', 'dblog', 'help', 'path',
+    'menu', 'search', 'statistics', 'upload', 'openid',
+    // Contrib modules
+    'imagecache_ui', 'views_ui', 'adminrole',
+    // Features
+    'kt_bookmarks', 'kt_block_header_image', 'kt_bueditor_imce', 'kt_stories', 'kt_simple_gallery',
+  );
+}
+
+/**
+* Return a description of the profile for the initial installation screen.
+*
+* @return
+*   An array with keys 'name' and 'description' describing this profile.
+*/
+function brochure_profile_details() {
+  return array(
+    'name' => st('Brochure website'),
+    'description' => st("Create a simple brochure website."),
+  );
+}
+
+/**
+ * Return a list of tasks that this profile supports.
+ *
+ * @return
+ *  An array of tasks that this profile should execute
+**/
+function brochure_profile_task_list() {
+  return array('koumbit-profile-batch' => t('Configure brochure site'));
+}
+
+/**
+ * Perform any final installation tasks for this profile.
+ *
+ * $task
+ *  The current $task of the install system. When hook_profile_tasks() is first called, this is 'profile'.
+ * $url
+    Complete URL to be used for a link or form action on a custom page, if providing any, to allow the user to proceed with the installation.
+**/
+function brochure_profile_tasks(&$task, $url) {
+  switch($task) {
+    case 'profile':
+        // Start a batch, switch to 'koumbit-profile-batch' task. We need to
+        // set the variable here, because batch_process() redirects.
+        variable_set('install_task', 'koumbit-profile-batch');
+        _brochure_set_batch($task, $url);
+        break;
+    case 'koumbit-profile-batch':
+      // We are running a batch install of the profile.
+      // This might run in multiple HTTP requests, constantly redirecting
+      // to the same address, until the batch finished callback is invoked
+      // and the task advances to 'profile-finished'.
+      include_once 'includes/batch.inc';
+      $output = _batch_page();
+      return $output;
+      break;
+  }
+}
+
+/**
+ * Sets up the batch processing of the install profile tasks to be run at the end of the install profile.
+ *
+ * Here you will want to set the default values for the features and settings that are associated with this profile creation.
+ *
+ * $profile_dependencies - Array of all the dependencies such as features / strongarm
+ * $profile_features - Array of all the profile features
+ * $profile_settings_feature - Array of all the profile feature storing the system settings
+ * $profile_theme - array of the profile theme to use for default
+ *
+ * $task
+ *  The current $task of the install system. When hook_profile_tasks() is first called, this is 'profile'.
+ * $url
+    Complete URL to be used for a link or form action on a custom page, if providing any, to allow the user to proceed with the installation.
+**/
+function _brochure_set_batch(&$task, $url) {
+ // Set default values associated with profile features
+ variable_set('install_dependencies', brochure_profile_modules());
+
+ // Feature / Strongarm dependencies
+ $profile_dependencies = array('features','strongarm', 'diff');
+
+ // Profile features / settings
+ $profile_features = array('news');
+// $profile_settings_feature = array('ktbrochure_cfg');
+ $profile_theme = array('acquia_marina');
+
+ $batch = array(
+    'operations' => array(
+      array('_brochure_batch_dispatch', array('_brochure_install_dependencies', array($profile_dependencies))),
+//      array('_brochure_batch_dispatch', array('_brochure_create_content_types', array())),
+      array('_brochure_batch_dispatch', array('_brochure_configure_theme', array($profile_theme))),
+      array('_brochure_batch_dispatch', array('_brochure_flush_caches', array())),
+      array('_brochure_batch_dispatch', array('_brochure_install_brochure_features', array($profile_features))),
+//      array('_brochure_batch_dispatch', array('_brochure_install_brochure_settings', array($profile_settings_feature))),
+      array('_brochure_batch_dispatch', array('_brochure_flush_caches', array())),
+    ),
+    'title' => t('Setting up Brochure site...'),
+    'init_message' => t('Starting Brochure profile configuration...'),
+    'progress_message' => t('Processed @current out of @total.'),
+    'finished' => '_brochure_batch_finished',
+  );
+  batch_set($batch);
+  batch_process($url, $url);
+}
+
+/**
+ * Dispatch function for the batch processing. This allows us to do some
+ * consistent setup across page loads while breaking up the tasks.
+ *
+ * @param $function
+ *   The function to dispatch to.
+ * @param $args
+ *   Any args passed to the function from the batch.
+ * @param $context
+ *   The batch context.
+ */
+function _brochure_batch_dispatch($function, $args, &$context) {
+  // Refresh the variables table (since it might have changed during one of the batch processes)
+  $conf = variable_init(array());
+
+  // Grab the dependencies
+  $dependencies = $conf['install_dependencies'];
+
+  // If not in 'safe mode', increase the maximum execution time:
+  if (!ini_get('safe_mode')) {
+    set_time_limit(0);
+  }
+
+  // Add include the applicable dependencies
+  if (!empty($dependencies)) {
+    install_include($dependencies);
+  }
+  $function($args, $context);
+}
+
+/**
+* Batch 'finished' callback
+*/
+function _brochure_batch_finished($success, $results, $operations) {
+  if ($success) {
+    // Here we do something meaningful with the results.
+    $message = count($results) .' actions processed.';
+    $message .= theme('item_list', $results);
+    $type = 'status';
+  }
+  else {
+    // An error occurred.
+    // $operations contains the operations that remained unprocessed.
+    $error_operation = reset($operations);
+    $message = 'An error occurred while processing '. $error_operation[0] .' with arguments :'. print_r($error_operation[0], TRUE);
+    $type = 'error';
+  }
+
+  // Clear out any status messages that modules may have thrown, as we're
+  // setting our own for the profile.  Leave error messages, however.
+  drupal_get_messages('status');
+  drupal_set_message($message, $type);
+
+  // Advance the installer task.
+  variable_set('install_task', 'profile-finished');
+  variable_del('install_dependencies');
+}
+
+/**
+  * Create any default content types
+**/
+function _brochure_create_content_types($args, &$context) {
+  $context['message'] = t('Set up basic node types');
+
+  // Insert default user-defined node types into the database. For a complete
+  // list of available node type attributes, refer to the node type API
+  // documentation at: http://api.drupal.org/api/HEAD/function/hook_node_info.
+  $types = array(
+    array(
+      'type' => 'page',
+      'name' => st('Page'),
+      'module' => 'node',
+      'description' => st("A <em>page</em>, similar in form to a <em>story</em>, is a simple method for 
+creating and displaying information that rarely changes, such as an \"About us\" section of a website. By 
+default, a <em>page</em> entry does not allow visitor comments and is not featured on the site's initial home 
+page."),
+      'custom' => TRUE,
+      'modified' => TRUE,
+      'locked' => FALSE,
+      'help' => '',
+      'min_word_count' => '',
+    ),
+    array(
+      'type' => 'story',
+      'name' => st('Story'),
+      'module' => 'node',
+      'description' => st("A <em>story</em>, similar in form to a <em>page</em>, is ideal for creating and 
+displaying content that informs or engages website visitors. Press releases, site announcements, and informal 
+blog-like entries may all be created with a <em>story</em> entry. By default, a <em>story</em> entry is 
+automatically featured on the site's initial home page, and provides the ability to post comments."),
+      'custom' => TRUE,
+      'modified' => TRUE,
+      'locked' => FALSE,
+      'help' => '',
+      'min_word_count' => '',
+    ),
+  );
+
+  foreach ($types as $type) {
+    $type = (object) _node_type_set_defaults($type);
+    node_type_save($type);
+    // Store some result for post-processing in the finished callback.
+    $context['results'][] = t('Set up node type %type.', array('%type' => $type->name));
+  }
+
+  // Default page to not be promoted.
+  variable_set('node_options_page', array('status'));
+}
+
+/**
+  * Configure any custom themes
+**/
+function _brochure_configure_theme($args, &$context) {
+  $context['message'] = t('Configuring default theme...' . var_export($args[0],true));
+
+  $themes = system_theme_data();
+  // In preference descending order
+  foreach ($args[0] as $theme) {
+    if (array_key_exists($theme, $themes)) {
+      system_initialize_theme_blocks($theme);
+      db_query("UPDATE {system} SET status = 1 WHERE type = 'theme' and name = '%theme'", array('%theme' => $theme));
+      variable_set('theme_default', $theme);
+    }
+  }
+
+  $context['results'][] = t('Configured default theme.');
+}
+
+/**
+ * Dispatch any installations of module dependencies that should be installed prior to installing modules
+ *
+ * $args
+ *  arg[0] - an array of dependencies to install
+**/
+function _brochure_install_dependencies($args, &$context) {
+ $context['message'] = t('Installing all dependencies...');
+  _brochure_install_modules($args[0]);
+}
+
+/**
+ * Install any related settings feature
+ *
+ * $args
+ *  arg[0] - an array of settings to install
+**/
+function _brochure_install_brochure_settings($args, &$context) {
+ $context['message'] = t('Configuring all site settings...');
+ _brochure_install_modules($args[0]);
+}
+
+/**
+ * Install any related features exported
+ *
+ * $args
+ *  arg[0] - an array of features to install
+**/
+function _brochure_install_brochure_features($args, &$context) {
+ $context['message'] = t('Installing all petition features...');
+ _brochure_install_modules($args[0]);
+}
+
+/**
+ * Generic function that installs specified modules
+ *
+ * $modules_list
+ *   An array of modules to be installed
+ *
+**/
+function _brochure_install_modules($modules_list) {
+ $dependencies = _brochure_find_dependencies($modules_list);
+
+ // Update the default dependencies list
+ $alldependencies = variable_get('install_dependencies', array());
+ $alldependencies = array_merge($alldependencies, $dependencies);
+ variable_set('install_dependencies', $alldependencies);
+
+ // Install all the modules
+ drupal_install_modules($dependencies);
+}
+
+/**
+ * Generic function that goes through and determines dependencies of modules
+ *
+ * $dependencies
+ *  An array of modules to find dependencies for
+ *
+ * @return
+ *  Return a list of all dependencies
+**/
+function _brochure_find_dependencies($dependencies) {
+ // Determine the dependencies for the features and strongarm modules
+ // [SB: In D7 we won't have to do this but there seems to be an issue with this not working properly when
+ //  calling drupal_install_modules(...)]
+ $modules_list = $dependencies;
+ $files = module_rebuild_cache();
+
+ foreach ($modules_list as $module) {
+   $file = $files[$module];
+   if (isset($file->info['dependencies']) && is_array($file->info['dependencies'])) {
+     $dependencies = array_merge($file->info['dependencies'], $dependencies);
+   }
+ }
+
+ return $dependencies; 
+}
+
+/**
+ * Flushes all the drupal caches to ensure that future modules install properly
+**/
+function _brochure_flush_caches($args, &$context) {
+  $context['message'] = t('Rebuilding all caches...');
+
+  drupal_flush_all_caches();
+}
+
+/** For testing **/
+
+/**
+ * Implementation of hook_form_alter().
+ *
+ * Allows the profile to alter the site-configuration form. This is
+ * called through custom invocation, so $form_state is not populated.
+ */
+function brochure_form_alter(&$form, $form_state, $form_id) {
+  if ($form_id == 'install_configure') {
+    $form['site_information']['site_name']['#default_value'] = 'Donkey Kong';
+    $form['site_information']['site_mail']['#default_value'] = 'shane@test.com';
+    $form['admin_account']['account']['name']['#default_value'] = 'shane';
+    $form['admin_account']['account']['mail']['#default_value'] = 'shane@test.com';
+    $form['pass']['password_confirm']['#default_value'] = 'test';
+  }
+//print_r(var_export($form, true));
+}
+
