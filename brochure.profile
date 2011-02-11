@@ -86,6 +86,8 @@ function brochure_profile_modules() {
   'views',
   'views_content',
   'views_slideshow',
+  'views_slideshow_singleframe',
+  'views_slideshow_thumbnailhover',
   'views_ui',
 
 /**
