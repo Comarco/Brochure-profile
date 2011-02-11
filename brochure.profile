@@ -78,7 +78,7 @@ function brochure_profile_modules() {
   'strongarm',
   'superfish',
   'skinr',
-  'stylizer',
+/*  'stylizer', */
 /*  'sweaver', */
   'taxonomy_export',
   'text',
