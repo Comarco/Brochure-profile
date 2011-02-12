@@ -193,7 +193,7 @@ function brochure_profile_tasks(&$task, $url) {
   $node->type = 'page';
   $node->status = 1;
   $node->title = 'Test';
-  $node->body = 'test de node';
+  $node->body = 'You can start by editing this panel. You can also activate the sweaver module to be abble to changes colors and add some background images. This is worth the try. Full help will come eventually :P';
 
   node_save($node);
 
