@@ -38,6 +38,8 @@ function brochure_profile_modules() {
   'context_ui',
   'ctools',
   'custom_pagers',
+  'devel', /* provisory */
+  'diff', /* provisory */
   'features',
   'filefield',
   'filefield_paths',
