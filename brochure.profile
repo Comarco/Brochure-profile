@@ -7,7 +7,7 @@
  * @return
  *   An array of modules to enable.
  */
-function brochure_profile_modules() {
+function brochure-dev3_profile_modules() {
   return array(
   'dblog',
   'color',
@@ -109,17 +109,17 @@ function brochure_profile_modules() {
   );
 }
 
-function brochure_profile_details() {
+function brochure-dev3_profile_details() {
   return array(
-    'name' => 'Brochure website Devi 1',
+    'name' => 'Brochure website Devi 3',
     'description' => 'Create a simple brochure website',
  );
 }
 
-function brochure_profile_task_list() {
+function brochure-dev3_profile_task_list() {
 }
 
-function brochure_profile_tasks(&$task, $url) {
+function brochure-dev3_profile_tasks(&$task, $url) {
 
   // Insert default user-defined node types into the database. For a complete
   // list of available node type attributes, refer to the node type API
@@ -163,7 +163,7 @@ function brochure_profile_tasks(&$task, $url) {
   $theme_settings['toggle_node_info_page'] = FALSE;
   variable_set('theme_settings', $theme_settings);
 
-  variable_set('install_profile', 'brochure');
+  variable_set('install_profile', 'brochure-dev3');
   drupal_set_title(st("Configuring roles, blocks and theme"));
 
   // Enable adaptivetheme theme
@@ -220,9 +220,9 @@ function brochure_profile_tasks(&$task, $url) {
  * Allows the profile to alter the site-configuration form. This is
  * called through custom invocation, so $form_state is not populated.
  */
-//function brochure_form_alter(&$form, $form_state, $form_id) {
+//function brochure-dev3_form_alter(&$form, $form_state, $form_id) {
 //  if ($form_id == 'install_configure') {
 //    // Set default for site name field.
-//    $form['site_information']['site_name']['#brochure_value'] = $_SERVER['SERVER_NAME'];
+//    $form['site_information']['site_name']['#brochure-dev3_value'] = $_SERVER['SERVER_NAME'];
 //  }
 //}
