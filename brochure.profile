@@ -97,7 +97,7 @@ function brochure_profile_modules() {
  *   Features
 **/
 /*  'kt_basic', */
-  'kt_bookmarks',
+/*  'kt_bookmarks', */
   'kt_block_header_image',
   'kt_bueditor_imce',
 /*  'kt_i18n', */
