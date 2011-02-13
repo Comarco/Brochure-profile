@@ -80,7 +80,7 @@ function brochure_profile_modules() {
   'prepopulate',
   'strongarm',
   'superfish',
-  'skinr',
+/*  'skinr', */
 /*  'stylizer', */
 /*  'sweaver', */
   'taxonomy_export',
