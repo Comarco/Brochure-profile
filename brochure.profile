@@ -111,7 +111,7 @@ function brochure_profile_modules() {
 
 function brochure_profile_details() {
   return array(
-    'name' => 'Brochure website Devi 1',
+    'name' => 'Brochure website Dev 4',
     'description' => 'Create a simple brochure website',
  );
 }
