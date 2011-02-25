@@ -1,0 +1,121 @@
+; $Id $ 
+
+name = Brochure Website
+description = Create a simple brochure website.
+core = 6.x
+theme = brochure_basic
+
+; -----------------------------------------------------------------------------
+;                             Modules & Features
+; -----------------------------------------------------------------------------
+; N. B. Any dependencies of the listed modules/features will be detected and
+; enabled automatically. 
+
+; --------------------------------- Core --------------------------------------
+dependencies[] = dblog
+dependencies[] = color
+dependencies[] = contact
+dependencies[] = comment
+dependencies[] = help
+dependencies[] = locale
+dependencies[] = menu
+dependencies[] = path
+; vvv should disappear in the near future
+dependencies[] = php
+dependencies[] = search
+dependencies[] = taxonomy
+dependencies[] = translation
+dependencies[] = upload
+
+; -------------------------------- Contrib -------------------------------------
+dependencies[] = adminrole
+dependencies[] = admin_menu
+; dependencies[] = boxes
+dependencies[] = bueditor
+dependencies[] = ctools
+dependencies[] = ctools_custom_content
+dependencies[] = content
+dependencies[] = context
+dependencies[] = context_ui
+dependencies[] = ctools
+dependencies[] = custom_pagers
+; vvv provisory
+dependencies[] = devel
+; vvv provisory
+dependencies[] = diff
+dependencies[] = features
+dependencies[] = filefield
+dependencies[] = filefield_paths
+dependencies[] = fontyourface
+; dependencies[] = i18n
+; dependencies[] = i18nblocks
+; dependencies[] = i18ncck
+; dependencies[] = i18nmenu
+; dependencies[] = i18nstrings
+; dependencies[] = i18nsync
+; dependencies[] = i18ntaxonomy
+; dependencies[] = i18nviews
+dependencies[] = imageapi
+dependencies[] = imageapi_gd
+dependencies[] = imagecache
+dependencies[] = imagecache_autorotate
+dependencies[] = imagecache_canvasactions
+dependencies[] = imagecache_coloractions
+dependencies[] = imagecache_customactions
+dependencies[] = imagecache_effects
+dependencies[] = imagecache_textactions
+dependencies[] = imagecache_ui
+dependencies[] = imagefield
+dependencies[] = image_fupload_imagefield
+dependencies[] = jquery_plugin
+dependencies[] = jquery_ui
+dependencies[] = bueditor
+dependencies[] = image_fupload
+dependencies[] = imce
+dependencies[] = l10n_update
+dependencies[] = libraries
+dependencies[] = lightbox2
+dependencies[] = link
+dependencies[] = number
+dependencies[] = optionwidgets
+dependencies[] = page_manager
+dependencies[] = panels
+dependencies[] = prepopulate
+dependencies[] = strongarm
+dependencies[] = superfish
+dependencies[] = skinr
+; dependencies[] = stylizer
+; dependencies[] = sweaver
+dependencies[] = taxonomy_export
+dependencies[] = text
+dependencies[] = token
+dependencies[] = views
+dependencies[] = views_content
+dependencies[] = views_slideshow
+dependencies[] = views_slideshow_singleframe
+dependencies[] = views_slideshow_thumbnailhover
+dependencies[] = views_ui
+
+; ------------------------------- Features ------------------------------------
+; dependencies[] = kt_basic
+dependencies[] = kt_bookmarks
+dependencies[] = kt_block_header_image
+dependencies[] = kt_bueditor_imce
+; dependencies[] = kt_i18n
+dependencies[] = kt_links
+dependencies[] = kt_stories
+dependencies[] = kt_simple_gallery
+; dependencies[] = ktodo
+dependencies[] = kt_brochure_layouts_boxes
+
+
+; -----------------------------------------------------------------------------
+;                                   Nodes
+; -----------------------------------------------------------------------------
+
+; ------------------------------ Documentation --------------------------------
+nodes[front][type] = page
+nodes[front][title] = Test
+nodes[front][uid] = 1
+nodes[front][body] = 'You can start by editing this panel. You can also activate the sweaver module to be abble to changes colors and add some background images. This is worth the try. Full help will come eventually :P'
+
