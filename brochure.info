@@ -99,11 +99,11 @@ dependencies[] = views_ui
 
 ; ------------------------------- Features ------------------------------------
 ; dependencies[] = kt_basic
-dependencies[] = kt_bookmarks
-dependencies[] = kt_block_header_image
+; dependencies[] = kt_bookmarks
+; dependencies[] = kt_block_header_image
 dependencies[] = kt_bueditor_imce
 ; dependencies[] = kt_i18n
-dependencies[] = kt_links
+; dependencies[] = kt_links
 dependencies[] = kt_stories
 dependencies[] = kt_simple_gallery
 ; dependencies[] = ktodo
