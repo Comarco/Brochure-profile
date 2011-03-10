@@ -84,6 +84,7 @@ dependencies[] = prepopulate
 dependencies[] = strongarm
 dependencies[] = superfish
 dependencies[] = skinr
+dependencies[] = skinr_ui
 ; dependencies[] = stylizer
 ; dependencies[] = sweaver
 dependencies[] = taxonomy_export
