@@ -1,6 +1,6 @@
 ; $Id $ 
 
-name = Brochure Website
+name = Brochure Website (Profiler)
 description = Create a simple brochure website.
 core = 6.x
 theme = brochure_basic
@@ -100,7 +100,7 @@ dependencies[] = views_ui
 ; ------------------------------- Features ------------------------------------
 ; dependencies[] = kt_basic
 ; dependencies[] = kt_bookmarks
-dependencies[] = kt_block_header_image
+; dependencies[] = kt_block_header_image
 dependencies[] = kt_bueditor_imce
 ; dependencies[] = kt_i18n
 ; dependencies[] = kt_links
@@ -109,6 +109,9 @@ dependencies[] = kt_simple_gallery
 ; dependencies[] = ktodo
 dependencies[] = kt_brochure_layouts_boxes
 
+;------------------------------- Content Types --------------------------------
+types[type] = page
+types[type] = story
 
 ; -----------------------------------------------------------------------------
 ;                                   Nodes
