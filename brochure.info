@@ -122,7 +122,8 @@ types[type] = story
 
 ; ------------------------------ Documentation --------------------------------
 nodes[front][type] = page
-nodes[front][title] = Test
+nodes[front][title] = Documentation:q
+
 nodes[front][uid] = 1
-nodes[front][body] = 'You can start by editing this panel. You can also activate the sweaver module to be abble to changes colors and add some background images. This is worth the try. Full help will come eventually :P'
+nodes[front][body] = '<ol><li>admin/build/themes/select <= Activate the theme</li><li>Flush all caches</li></ol>'
 
